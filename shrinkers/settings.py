@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-nd4cwtro)7_kh3xfa@hs#tvo^zinb5ofu-!)krfi4b+f$p7ka^'
+SECRET_KEY = 'django-insecure-hnlhl#ze2czsw2e(gpfciv(+w^4z9oob!c^_39m*ot%dtvsi+7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -29,7 +29,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
+AUTH_USER_MODEL = 'shortener.Users'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'shortener.apps.ShortenerConfig',
 ]
 
 MIDDLEWARE = [
