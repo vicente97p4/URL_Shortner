@@ -1,0 +1,23 @@
+<!DOCTYPE >
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FastCampus Django</title>
+  </head>
+  <body>
+    <h2>로그인</h2>
+    <h4>{% if msg %}{{msg}}{% endif %}</h4>
+    <form method="post">
+      {% csrf_token %} {{ form.as_p }} {% comment %} form을 p태그로 출력하라는
+      명령어 {% endcomment %} {% comment %} 만일 ul이었으면 ul 태그 형식으로
+      출력해준다 {% endcomment %}
+      <button type="submit">로그인</button>
+    </form>
+    <p>
+      {% comment %} url 그리고 url.py에서 설정한 path의 name을 넣으면 그 path를
+      의미한다. {% endcomment %}
+      <a href="{% url 'index' %}">홈으로</a>
+      <a href="{% url 'register' %}">회원가입</a>
+    </p>
+  </body>
+</html>
