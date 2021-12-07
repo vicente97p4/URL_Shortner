@@ -3,7 +3,9 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.http.response import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from shortener.forms import RegisterForm
+from django.core.paginator import Paginator
 from shortener.models import Users
 
 # Create your views here.
@@ -72,3 +74,13 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('index')
+
+@login_required
+def list_view(request):
+    page = int(request.GET.get('p', 1))
+    users = Users.objects.all().order_by('-id')
+    paginator = Paginator(users, 10)
+    users = paginator.get_page(page)
+    
+    return render(request, 'boards.html', {'users':users})
+

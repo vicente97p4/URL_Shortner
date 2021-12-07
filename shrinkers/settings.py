@@ -40,12 +40,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'shortener.apps.ShortenerConfig',
     'debug_toolbar',
+    'django_seed'
 ]
 
 # 여기에 있는 IP로 접속했을 경우에만 장고 debug_toolbar가 작동한다.
 INTERNAL_IPS = [ 
     '127.0.0.1',
 ]
+
+LOGIN_URL = '/login'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
