@@ -122,6 +122,57 @@ csrftoken은 매번 바뀌어서 이 페이지에서 하는 요청인지, 외부
 {% for i in items %}
 {% includes %} : 다른 HTML을 그대로 include해서 사용할 때 사용
 
-## 필터
+## Django 로그인 방식
 
-데이터를 선별적으로, 또는 보기 좋게 가공하는 것
+장고는 기본적으로 session 방식을 사용한다.
+
+1. 유저가 Django 서버에 로그인 정보를 전달한다.
+
+2. Django는 이 정보를 보고 유효한 정보면 session key를 발급하고 session data를 DB에 저장한다.
+
+3. Django에서 유저에게 session key를 전달한다. 이 session key는 session data를 가져오기 위한 일종의 ID 값이다.
+
+결론적으로 session에 관한 정보는 DB에 있다.
+
+session 방식을 사용하고 싶지 않으면 settings.py에 MIDDLEWARE에서 sessions 부분을 지우면 된다.
+
+## Session engine
+
+명시하지 않으면 DB로 작동한다.(Database backed session)
+
+DB로 세션을 작동하고 싶지 않으면 cache 방식, file 방식 등을 택할 수 있다.(Cached session, File based session, cookie based session 등)
+
+- cache는 디스크가 아닌 메모리에 있는 정보라 더 빠르다.
+
+- file based는 안정성이 좋다.
+
+## JWT와 차이점
+
+JWT는 앞에는 헤더, . 뒤에는 payload다.
+
+시크릿 키를 보고 앱 서버가 인증 여부를 판단한다.
+
+- JWT는 서버로 요청이 들어올 때마다 DB를 확인하지 않아도 된다. signature만 맞춰보고 signature가 정확하다면 바로 payload 부분을 사용하면 된다.
+  반면 장고는 반드시 DB를 봐야한다.
+
+- 근데 signature 외 부분은 암호화가 되지 않아 그 부분에 데이터가 많을 시 공격에 취약할 수 있다.
+
+- JWT와 장고 모두 정보 변경이 가능하다. 장고의 경우 session id는 그대로 유지되고 session data가 변경된다.
+
+정보 변경 시 장고는 클라이언트 측에서 변화가 없고 JWT는 클라이언트 측에서 새로운 JWT를 발급받아야 한다.
+
+- 저장 방식
+
+JWT는 Local storage, local session, cookie, index DB 모두 가능
+
+장고 session은 cookie base로만 사용되고 있다.
+
+다른 뤱프레임워크와 달리 장고는 풀스택이기 때문에 렌더링을 해줘야 한다 이때 로그인 여부를 알기 위해 cookie를 사용한다.
+
+- JWT는 life span이 짧아서 안전성이 높다.
+
+- 장고는 HTTPS를 쓰기 때문에 cookie 탈취 위협이 적다.
+
+장고는 request 인자에 session을 가지고 있다.
+
+반드시 key는 string으로 설정하고 호출 해야 한다.
