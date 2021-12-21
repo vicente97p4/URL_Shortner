@@ -176,3 +176,24 @@ JWT는 Local storage, local session, cookie, index DB 모두 가능
 장고는 request 인자에 session을 가지고 있다.
 
 반드시 key는 string으로 설정하고 호출 해야 한다.
+
+## 정책
+
+### 기본
+
+- User 당 50개 생성 가능
+- Refresh 하지 않으면 60일 유효
+- 이메일 미인증시 사용 불가
+- 1초에 같은 IP에서 5회 이상 호출 불가
+- 기본통계 제공
+- 302 리턴 .. redirect하는 경우 .. redirect(302)로 보내면 검색 엔진에 등록되지 않는다.
+
+### Premiere
+
+- 무제한 생성 가능
+- 삭제할 때까지 삭제되지 않음
+- 이메일 미인증시 사용 불가
+- 1초에 같은 IP에서 20회 이상 호출 불가
+- 어드벤스드 통계 제공
+- 301 리턴 .. 302와는 달리 permenant redirect라서 검색 엔진에 등록된다.
+
