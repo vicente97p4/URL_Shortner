@@ -5,27 +5,32 @@ from django.db import models
 from django.contrib.auth.models import User as U
 
 # Create your models here.
+class TimeStampedModel(models.Model):
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        abstract = True # django´Â Å¬·¡½º¸¦ Å×ÀÌºíÀ» ¸¸µé¾î¼­ °ü¸®ÇÑ´Ù.
+        # ±×·¡¼­ ÀÌ·¸°Ô »ó¼Ó½ÃÅ°´Â class¸¦ ¸¸µå·Á¸é
+        # Meta class¿¡¼­ abstract = True¸¦ ÇØÁà¾ß ÇÑ´Ù.
 
 
-class PayPlan(models.Model):
+class PayPlan(TimeStampedModel):
     name = models.CharField(max_length=20)
     price = models.IntegerField()
-    updated_at = models.DateTimeField(auto_now=True)
-    create_at = models.DateTimeField(auto_now_add=True)
+    
 
 
-class Organization(models.Model):
+class Organization(TimeStampedModel):
     class Industries(models.TextChoices):
         PERSONAL = 'personal'
         RETAIL = 'retail'
         MANUFACTURING = 'manufacturing'
         IT = 'it'
         OTHERS = 'others'
-    name = models.CharField(max_length=50) # íšŒì‚¬ ì´ë¦„
-    industry = models.CharField(max_length=15, choices=Industries.choices, default=Industries.OTHERS) # ìœ„ 5ê°œ ì¤‘ 1ê°œ
+    name = models.CharField(max_length=50) # ?šŒ?‚¬ ?´ë¦?
+    industry = models.CharField(max_length=15, choices=Industries.choices, default=Industries.OTHERS) # ?œ„ 5ê°? ì¤? 1ê°?
     pay_plan = models.ForeignKey(PayPlan, on_delete=models.DO_NOTHING, null=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Users(models.Model):
@@ -34,23 +39,19 @@ class Users(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.DO_NOTHING, null=True)
 
 
-class EmailVerification(models.Model):
+class EmailVerification(TimeStampedModel):
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
     key = models.CharField(max_length=100, null=True)
     verified = models.BooleanField(default=False)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True)
     
     
-class Categories(models.Model):
+class Categories(TimeStampedModel):
     name = models.CharField(max_length=100)
     organization = models.ForeignKey(Organization, on_delete=models.DO_NOTHING, null=True)
     creator = models.ForeignKey(Users, on_delete=models.CASCADE)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True)
     
     
-class ShortenedUrls(models.Model):
+class ShortenedUrls(TimeStampedModel):
     class UrlCreatedVia(models.TextChoices):
         WEBSITE = "web"
         TELEGRAM = "telegram"
@@ -61,10 +62,10 @@ class ShortenedUrls(models.Model):
 
     nick_name = models.CharField(max_length=100)
     category = models.ForeignKey(Categories, on_delete=models.DO_NOTHING, null=True)
-    prefix = models.CharField(max_length=50) # /1234 ë¼ëŠ” urlì´ ìˆë‹¤ê³  í•´ë³´ì, ê·¸ëŸ¼ 9999ê¹Œì§€ë°–ì— ë§Œë“¤ ìˆ˜ ì—†ë‹¤. ê·¸ë˜ì„œ ì•ì— ì„ì˜ì˜ ë¬¸ìë¥¼ ë‘ê¸° ìœ„í•´ ë§Œë“¤ì—ˆë‹¤. ë‚˜ì¤‘ì—ëŠ” ë¬¸ì ëŒ€ì‹  ì›í•˜ëŠ” identityë¥¼ ë„£ëŠ”ë‹¤.
+    prefix = models.CharField(max_length=50) # /1234 ?¼?Š” url?´ ?ˆ?‹¤ê³? ?•´ë³´ì, ê·¸ëŸ¼ 9999ê¹Œì??ë°–ì— ë§Œë“¤ ?ˆ˜ ?—†?‹¤. ê·¸ë˜?„œ ?•?— ?„?˜?˜ ë¬¸ìë¥? ?‘ê¸? ?œ„?•´ ë§Œë“¤?—ˆ?‹¤. ?‚˜ì¤‘ì—?Š” ë¬¸ì ????‹  ?›?•˜?Š” identityë¥? ?„£?Š”?‹¤.
     creator = models.ForeignKey(Users, on_delete=models.CASCADE)
     target_url = models.CharField(max_length=2000)
     shortened_url = models.CharField(max_length=6, default=rand_string)
     created_via = models.CharField(max_length=8, choices=UrlCreatedVia.choices, default=UrlCreatedVia.WEBSITE)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    expired_at = models.DateTimeField(null=True)
+    
