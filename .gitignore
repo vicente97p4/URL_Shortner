@@ -3,3 +3,5 @@ db.sqlite3
 /shortener/migrations/
 /shortener/__pycache__/
 .DS_Store
+.mmdb
+geolite2/

@@ -33,7 +33,6 @@ else:
 
 ALLOWED_HOSTS = ["*"]
 
-
 # Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -43,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "shortener.apps.ShortenerConfig",
+    "django_user_agents",
 ]
 
 # if DEBUG:
@@ -65,10 +65,12 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_user_agents.middleware.UserAgentMiddleware",
 ]
 
+GEOIP_PATH = os.path.join(BASE_DIR, "geolite2")
 # if DEBUG:
-#     INSTALLED_APPS += [
+#     MIDDLEWARE += [
 #         "debug_toolbar.middleware.DebugToolbarMiddleware",  # Django Debug Toolbar
 #     ]
 
@@ -101,13 +103,10 @@ DATABASES = {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "app_db",
         "USER": "root",
-        "PASSWORD": "",
+        "PASSWORD": "Xptmxm123!",
         "HOST": "34.64.125.191",
         "PORT": 3306,
-        "OPTIONS": {
-            'autocommit': True,
-            'charset': 'utf8mb4'
-        }
+        "OPTIONS": {"autocommit": True, "charset": "utf8mb4"},
     }
 }
 
